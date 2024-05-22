@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>532</height>
+    <width>575</width>
+    <height>415</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>575</width>
+    <height>415</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>575</width>
+    <height>415</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -18,9 +30,21 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>571</width>
-     <height>411</height>
+     <width>575</width>
+     <height>415</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>575</width>
+     <height>415</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>575</width>
+     <height>415</height>
+    </size>
    </property>
    <property name="tabPosition">
     <enum>QTabWidget::TabPosition::South</enum>
@@ -33,15 +57,15 @@
      <string>Список соискателей</string>
     </attribute>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QTableWidget" name="employertableWidget"/>
-     </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="moveToActsButton">
        <property name="text">
         <string>Отправить на верификацию</string>
        </property>
       </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QTableWidget" name="employertableWidget"/>
      </item>
     </layout>
    </widget>
