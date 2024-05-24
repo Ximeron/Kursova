@@ -47,7 +47,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -112,6 +112,10 @@
      <property name="text">
       <string>Exit</string>
      </property>
+     <property name="icon">
+      <iconset resource="res.qrc">
+       <normaloff>:/icons/exit_right.svg</normaloff>:/icons/exit_right.svg</iconset>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
@@ -153,6 +157,10 @@
        <property name="text">
         <string/>
        </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/icons/refresh_alt.svg</normaloff>:/icons/refresh_alt.svg</iconset>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
@@ -160,12 +168,18 @@
        <property name="text">
         <string/>
        </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/icons/cross_circle.svg</normaloff>:/icons/cross_circle.svg</iconset>
+       </property>
       </widget>
      </item>
     </layout>
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -50,22 +50,22 @@
     <enum>QTabWidget::TabPosition::South</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
      <string>Список соискателей</string>
     </attribute>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
+     <item row="2" column="0">
+      <widget class="QTableWidget" name="employertableWidget"/>
+     </item>
+     <item row="3" column="0">
       <widget class="QPushButton" name="moveToActsButton">
        <property name="text">
         <string>Отправить на верификацию</string>
        </property>
       </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QTableWidget" name="employertableWidget"/>
      </item>
     </layout>
    </widget>
