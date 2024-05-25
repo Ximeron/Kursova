@@ -28,16 +28,27 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QComboBox" name="comboBoxEmployers"/>
      </item>
-     <item row="1" column="0">
-      <widget class="QComboBox" name="comboBoxVacancies"/>
-     </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QPushButton" name="applyButton">
        <property name="text">
         <string>Откликнуться</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QComboBox" name="comboBoxVacancies"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="exitButton">
+       <property name="text">
+        <string>Выйти</string>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/icons/exit_right.svg</normaloff>:/icons/exit_right.svg</iconset>
        </property>
       </widget>
      </item>
@@ -45,6 +56,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

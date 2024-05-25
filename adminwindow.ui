@@ -47,7 +47,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -58,8 +58,8 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>191</width>
-       <height>231</height>
+       <width>361</width>
+       <height>321</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -99,23 +99,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-    <widget class="QPushButton" name="exitButton">
-     <property name="geometry">
-      <rect>
-       <x>460</x>
-       <y>60</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Exit</string>
-     </property>
-     <property name="icon">
-      <iconset resource="res.qrc">
-       <normaloff>:/icons/exit_right.svg</normaloff>:/icons/exit_right.svg</iconset>
-     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
@@ -175,6 +158,11 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Выйти</string>
+    </attribute>
    </widget>
   </widget>
  </widget>

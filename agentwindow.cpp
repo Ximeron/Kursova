@@ -1,15 +1,10 @@
 #include "agentwindow.h"
 #include "ui_agentwindow.h"
 #include "verificationdialog.h"
-
-#include <QMessageBox>
-#include <QSqlQuery>
-#include <QDebug>
 #include <QMainWindow>
-#include <QRegularExpression>
-#include <QRegularExpressionValidator>
 #include "DBT.h"
-AgentWindow::AgentWindow(QWidget *parent)
+DBT agentDB;
+AgentWindow::AgentWindow(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::AgentWindow)
 {
@@ -29,6 +24,7 @@ AgentWindow::AgentWindow(QWidget *parent)
     ui->empleeTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->emplerTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    populateEmplsTable();
     loadActs();
 
 
@@ -51,28 +47,27 @@ void AgentWindow::on_addEmployerButton_clicked()
 
 
 
-    if (employerName.isEmpty() || employerSurname.isEmpty() || employerPatronymic.isEmpty() || employerINN.isEmpty() || employerPhone.isEmpty()) {
+    if (employerName.isEmpty() || employerSurname.isEmpty() || employerPatronymic.isEmpty() || employerINN.isEmpty() || employerPhone.isEmpty())
+    {
         QMessageBox::warning(this, "Ошибка", "Пожалуйста, заполните все поля");
         return;
     }
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO Employers (Фамилия, Имя, Отчество, ИНН, Телефон) VALUES (:employerSurname, :employerName, :employerPatronymic, :employerINN, :employerPhone)");
-    query.bindValue(":employerName", employerName);
-    query.bindValue(":employerSurname", employerSurname);
-    query.bindValue(":employerPatronymic", employerPatronymic);
-    query.bindValue(":employerINN", employerINN);
-    query.bindValue(":employerPhone", employerPhone);
+    QSqlQuery query = agentDB.addEmployer(employerName, employerSurname, employerPatronymic, employerINN, employerPhone);
 
-
-    if (query.exec()) {
+    if (query.exec())
+    {
         QMessageBox::information(this, "Успех", "Работодатель успешно добавлен");
         ui->employerNameLineEdit->clear();
         ui->employerSurnameLineEdit->clear();
         ui->employerPatronymicLineEdit->clear();
         ui->employerINNLineEdit->clear();
         ui->employerPhoneLineEdit->clear();
-    } else {
+        populateEmplsTable();
+
+    }
+    else
+    {
         QMessageBox::critical(this, "Ошибка", "Не удалось добавить работодателя");
     }
 }
@@ -84,28 +79,28 @@ void AgentWindow::on_addEmployeeButton_clicked()
     QString employeePatronymic = ui->employeePatronymicLineEdit->text();
     QString employeeJobTime = ui->employeeJobTimeLineEdit->text();
     QString employeePhone = ui->employeePhoneLineEdit->text();
-    if (employeeName.isEmpty() || employeeSurname.isEmpty() || employeePatronymic.isEmpty() || employeeJobTime.isEmpty() || employeePhone.isEmpty()) {
+
+    if (employeeName.isEmpty() || employeeSurname.isEmpty() || employeePatronymic.isEmpty() || employeeJobTime.isEmpty() || employeePhone.isEmpty())
+    {
         QMessageBox::warning(this, "Ошибка", "Пожалуйста, заполните все поля");
         return;
     }
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO Employees (Имя, Фамилия, Отчество, Стаж, Телефон) VALUES (:employeeName, :employeeSurname, :employeePatronymic, :employeeJobTime, :employeePhone)");
-    query.bindValue(":employeeName", employeeName);
-    query.bindValue(":employeeSurname", employeeSurname);
-    query.bindValue(":employeePatronymic", employeePatronymic);
-    query.bindValue(":employeeJobTime", employeeJobTime);
-    query.bindValue(":employeePhone", employeePhone);
+    QSqlQuery query = agentDB.addEmployee(employeeName, employeeSurname, employeePatronymic, employeeJobTime, employeePhone);
 
-    if (query.exec()) {
+    if (query.exec())
+    {
         QMessageBox::information(this, "Успех", "Соискатель успешно добавлен");
         ui->employeeNameLineEdit->clear();
         ui->employeeSurnameLineEdit->clear();
         ui->employeePatronymicLineEdit->clear();
         ui->employeeJobTimeLineEdit->clear();
         ui->employeePhoneLineEdit->clear();
+        populateEmplsTable();
 
-    } else {
+    }
+    else
+    {
         QMessageBox::critical(this, "Ошибка", "Не удалось добавить соискателя");
     }
 }
@@ -118,8 +113,10 @@ void AgentWindow::on_refreshEmpls_clicked()
 void AgentWindow::on_deleteEmplee_clicked()
 {
     // Получаем выбранный элемент
-    QTableWidgetItem *item = ui->empleeTable->currentItem();
-    if (!item) {
+    QTableWidgetItem* item = ui->empleeTable->currentItem();
+
+    if (!item)
+    {
         QMessageBox::warning(this, "Ошибка", "Выберите запись для удаления");
         return;
     }
@@ -128,19 +125,21 @@ void AgentWindow::on_deleteEmplee_clicked()
     int id = ui->empleeTable->item(row, 0)->text().toInt(); // Получаем ID агента
 
     // Выполняем запрос к базе данных для удаления агента
-    QSqlQuery emplee_query;
-    emplee_query.prepare("DELETE FROM Employees WHERE id = :id");
-    emplee_query.bindValue(":id", id);
+    QSqlQuery emplee_query = agentDB.del_emplee(id);
 
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить запись?",
-                                  QMessageBox::Yes|QMessageBox::No);
+            QMessageBox::Yes | QMessageBox::No);
 
-    if (reply == QMessageBox::Yes) {
-        if (emplee_query.exec()) {
+    if (reply == QMessageBox::Yes)
+    {
+        if (emplee_query.exec())
+        {
             populateEmplsTable();
             QMessageBox::information(this, "Успех", "Запись успешно удалена");
-        } else {
+        }
+        else
+        {
             QMessageBox::critical(this, "Ошибка", "Не удалось удалить запись");
         }
     }
@@ -150,8 +149,10 @@ void AgentWindow::on_deleteEmplee_clicked()
 void AgentWindow::on_deleteEmpler_clicked()
 {
     // Получаем выбранный элемент
-    QTableWidgetItem *item = ui->emplerTable->currentItem();
-    if (!item) {
+    QTableWidgetItem* item = ui->emplerTable->currentItem();
+
+    if (!item)
+    {
         QMessageBox::warning(this, "Ошибка", "Выберите запись для удаления");
         return;
     }
@@ -161,19 +162,21 @@ void AgentWindow::on_deleteEmpler_clicked()
     int id = ui->emplerTable->item(row, 0)->text().toInt(); // Получаем ID агента
 
     // Выполняем запрос к базе данных для удаления агента
-    QSqlQuery empler_query;
-    empler_query.prepare("DELETE FROM Employers WHERE id = :id");
-    empler_query.bindValue(":id", id);
+    QSqlQuery empler_query = agentDB.del_empler(id);
 
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить запись?",
-                                  QMessageBox::Yes|QMessageBox::No);
+            QMessageBox::Yes | QMessageBox::No);
 
-    if (reply == QMessageBox::Yes) {
-        if (empler_query.exec()) {
+    if (reply == QMessageBox::Yes)
+    {
+        if (empler_query.exec())
+        {
             populateEmplsTable();
             QMessageBox::information(this, "Успех", "Запись успешно удалена");
-        } else {
+        }
+        else
+        {
             QMessageBox::critical(this, "Ошибка", "Не удалось удалить запись");
         }
     }
@@ -190,12 +193,14 @@ void AgentWindow::populateEmplsTable()
     ui->emplerTable->setRowCount(0);
 
     // Выполняем запрос к базе данных для получения данных агентов
-    QSqlQuery emplee("SELECT id, Фамилия, Имя, Отчество, Телефон, Стаж FROM Employees");
-    QSqlQuery empler("SELECT id, Фамилия, Имя, Отчество, ИНН, Телефон FROM Employers");
+    QSqlQuery emplee = agentDB.pop_emplee();
+    QSqlQuery empler = agentDB.pop_empler();
 
     // Заполняем таблицу данными из запроса
     int row1 = 0;
-    while (emplee.next()) {
+
+    while (emplee.next())
+    {
         ui->empleeTable->insertRow(row1);
         ui->empleeTable->setItem(row1, 0, new QTableWidgetItem(emplee.value(0).toString())); // ID
         ui->empleeTable->setItem(row1, 1, new QTableWidgetItem(emplee.value(1).toString())); // Фамилия
@@ -205,9 +210,11 @@ void AgentWindow::populateEmplsTable()
         ui->empleeTable->setItem(row1, 5, new QTableWidgetItem(emplee.value(5).toString())); // Телефон
         row1++;
     }
+
     int row2 = 0;
 
-    while (empler.next()) {
+    while (empler.next())
+    {
         ui->emplerTable->insertRow(row2);
         ui->emplerTable->setItem(row2, 0, new QTableWidgetItem(empler.value(0).toString())); // ID
         ui->emplerTable->setItem(row2, 1, new QTableWidgetItem(empler.value(1).toString())); // Фамилия
@@ -226,12 +233,14 @@ void AgentWindow::loadActs()
     ui->tableWidgetActs->setRowCount(0);
     ui->tableWidgetActs->setColumnCount(6);
     ui->tableWidgetActs->setHorizontalHeaderLabels(QStringList() << "id" << "Работодатель" << "Соискатель" << "Должность" << "Комиссионные" << "Подтверждено?");
-    QSqlQuery query;
-    query.prepare("SELECT id, employer_id, employee_id, Должность, Комиссионные, agree_flag FROM Acts");
+    QSqlQuery query = agentDB.pop_acts();
 
-    if (query.exec()) {
+    if (query.exec())
+    {
         int row = 0;
-        while (query.next()) {
+
+        while (query.next())
+        {
             ui->tableWidgetActs->insertRow(row);
             ui->tableWidgetActs->setItem(row, 0, new QTableWidgetItem(query.value("id").toString())); // act_id
             ui->tableWidgetActs->setItem(row, 1, new QTableWidgetItem(query.value("employer_id").toString())); // employee_id
@@ -241,7 +250,9 @@ void AgentWindow::loadActs()
             ui->tableWidgetActs->setItem(row, 5, new QTableWidgetItem(query.value("agree_flag").toBool() ? "Да" : "Нет")); // agree_flag
             row++;
         }
-    } else {
+    }
+    else
+    {
         qDebug() << "Ошибка загрузки актов: " << query.lastError().text();
         QMessageBox::critical(this, "Ошибка", "Не удалось загрузить акты.");
     }
@@ -250,34 +261,52 @@ void AgentWindow::loadActs()
 void AgentWindow::on_verifyActButton_clicked()
 {
     int currentRow = ui->tableWidgetActs->currentRow();
-    if (currentRow == -1) {
+
+    if (currentRow == -1)
+    {
         QMessageBox::warning(this, "Внимание", "Пожалуйста, выберите акт для верификации.");
         return;
     }
 
     bool ok;
     int actId = ui->tableWidgetActs->item(currentRow, 0)->text().toInt(&ok);
-    if (!ok) {
+
+    if (!ok)
+    {
         QMessageBox::critical(this, "Ошибка", "Ошибка преобразования ID акта.");
         return;
     }
 
     VerificationDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted) {
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
         double commission = dialog.getCommission();
 
-        QSqlQuery query;
-        query.prepare("UPDATE Acts SET Комиссионные = :commission, agree_flag = :agree_flag WHERE id = :id");
-        query.bindValue(":commission", commission);
-        query.bindValue(":agree_flag", 1); // Устанавливаем agree_flag в true
-        query.bindValue(":id", actId);
+        QSqlQuery query = agentDB.setCommission(commission, actId);
 
-        if (query.exec()) {
-            QMessageBox::information(this, "Успех", "Акт успешно верифицирован.");
-            loadActs();
-        } else {
-            qDebug() << "Ошибка верификации акта: " << query.lastError().text();
-            QMessageBox::critical(this, "Ошибка", "Не удалось верифицировать акт.");
+        if (commission > 0)
+        {
+            if (query.exec())
+            {
+                QMessageBox::information(this, "Успех", "Акт успешно верифицирован.");
+                loadActs();
+            }
+            else
+            {
+                qDebug() << "Ошибка верификации акта: " << query.lastError().text();
+                QMessageBox::critical(this, "Ошибка", "Не удалось верифицировать акт.");
+            }
         }
     }
+}
+
+void AgentWindow::on_exitButton_clicked()
+{
+    // Создаем объект LoginWindow
+    LoginWindow* loginWindow = new LoginWindow();
+    // Показываем окно LoginWindow
+    loginWindow->show();
+    // Закрываем текущее окно
+    this->close();
 }

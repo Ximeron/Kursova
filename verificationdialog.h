@@ -3,29 +3,30 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class VerificationDialog;
 }
 
 class VerificationDialog : public QDialog
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit VerificationDialog(QWidget *parent = nullptr);
-    ~VerificationDialog();
-    double getCommission() const;
-
-
-private slots:
-    void on_buttonBox_accepted();
-    void on_buttonBox_rejected();
+    public:
+        explicit VerificationDialog(QWidget* parent = nullptr);
+        ~VerificationDialog();
+        double getCommission() const;
 
 
+    private slots:
+        void on_buttonBox_accepted();
+        void on_buttonBox_rejected();
 
-private:
-    Ui::VerificationDialog *ui;
-    double commission;
+
+
+    private:
+        Ui::VerificationDialog* ui;
+        double commission;
 
 };
 

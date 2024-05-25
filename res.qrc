@@ -3,5 +3,6 @@
         <file>icons/cross_circle.svg</file>
         <file>icons/exit_right.svg</file>
         <file>icons/refresh_alt.svg</file>
+        <file>icons/box_add.svg</file>
     </qresource>
 </RCC>

@@ -50,7 +50,7 @@
     <enum>QTabWidget::TabPosition::South</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -96,6 +96,11 @@
       <string>PushButton</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Выйти</string>
+    </attribute>
    </widget>
   </widget>
  </widget>

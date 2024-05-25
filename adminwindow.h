@@ -3,28 +3,30 @@
 
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class AdminWindow;
 }
 
 class AdminWindow : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit AdminWindow(QWidget *parent = nullptr);
-    ~AdminWindow();
+    public:
+        explicit AdminWindow(QWidget* parent = nullptr);
+        ~AdminWindow();
 
-private slots:
-    void on_addAgentButton_clicked();
-    void on_refreshButton_clicked();
-    void on_deleteButton_clicked();
-    void on_exitButton_clicked();
+    private slots:
+        void on_addAgentButton_clicked();
+        void on_refreshButton_clicked();
+        void on_deleteButton_clicked();
 
 
-private:
-    Ui::AdminWindow *ui;
-    void populateAgentsTable();
+        void on_tabWidget_currentChanged(int index);
+
+    private:
+        Ui::AdminWindow* ui;
+        void populateAgentsTable();
 };
 
 #endif // ADMINWINDOW_H

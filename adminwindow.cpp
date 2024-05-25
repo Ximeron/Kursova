@@ -6,7 +6,7 @@
 DBT adminDB;
 
 
-AdminWindow::AdminWindow(QWidget *parent)
+AdminWindow::AdminWindow(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::AdminWindow)
 {
@@ -16,6 +16,7 @@ AdminWindow::AdminWindow(QWidget *parent)
     ui->patronymicLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Я]+")));
     ui->phoneLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]+")));
     ui->agentsViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tabWidget->setCurrentIndex(0);
 
 }
 
@@ -34,21 +35,25 @@ void AdminWindow::on_addAgentButton_clicked()
 
 
     // Проверяем, что все поля заполнены
-    if (surname.isEmpty() || name.isEmpty() || patronymic.isEmpty() || phone.isEmpty()) {
+    if (surname.isEmpty() || name.isEmpty() || patronymic.isEmpty() || phone.isEmpty())
+    {
         QMessageBox::warning(this, "Ошибка", "Пожалуйста, заполните все обязательные поля");
         return;
     }
 
     // Выполняем запрос к базе данных для добавления агента
-    bool chk = adminDB.Add_agent(surname,name,patronymic,phone);
+    bool chk = adminDB.Add_agent(surname, name, patronymic, phone);
 
-    if (chk){
+    if (chk)
+    {
         QMessageBox::information(this, "Успех", "Агент успешно добавлен");
         ui->surnameLineEdit->clear();
         ui->nameLineEdit->clear();
         ui->patronymicLineEdit->clear();
         ui->phoneLineEdit->clear();
-    } else {
+    }
+    else
+    {
         QMessageBox::critical(this, "Ошибка", "Не удалось добавить агента");
     }
 }
@@ -61,8 +66,10 @@ void AdminWindow::on_refreshButton_clicked()
 void AdminWindow::on_deleteButton_clicked()
 {
     // Получаем выбранный элемент
-    QTableWidgetItem *item = ui->agentsViewTable->currentItem();
-    if (!item) {
+    QTableWidgetItem* item = ui->agentsViewTable->currentItem();
+
+    if (!item)
+    {
         QMessageBox::warning(this, "Ошибка", "Выберите запись для удаления");
         return;
     }
@@ -71,12 +78,17 @@ void AdminWindow::on_deleteButton_clicked()
     int id = ui->agentsViewTable->item(row, 0)->text().toInt(); // Получаем ID агента
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить запись?",
-                                  QMessageBox::Yes|QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        if (adminDB.Del_agent(id)) {
+            QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        if (adminDB.Del_agent(id))
+        {
             populateAgentsTable();
             QMessageBox::information(this, "Успех", "Запись успешно удалена");
-        } else {
+        }
+        else
+        {
             QMessageBox::critical(this, "Ошибка", "Не удалось удалить запись");
         }
     }
@@ -96,7 +108,9 @@ void AdminWindow::populateAgentsTable()
     QSqlQuery query = adminDB.AgTable();
     // Заполняем таблицу данными из запроса
     int row = 0;
-    while (query.next()) {
+
+    while (query.next())
+    {
         ui->agentsViewTable->insertRow(row);
         ui->agentsViewTable->setItem(row, 0, new QTableWidgetItem(query.value(0).toString())); // ID
         ui->agentsViewTable->setItem(row, 1, new QTableWidgetItem(query.value(1).toString())); // Фамилия
@@ -107,12 +121,16 @@ void AdminWindow::populateAgentsTable()
     }
 }
 
-void AdminWindow::on_exitButton_clicked()
+void AdminWindow::on_tabWidget_currentChanged(int index)
 {
-    // Создаем объект LoginWindow
-    LoginWindow *loginWindow = new LoginWindow();
-    // Показываем окно LoginWindow
-    loginWindow->show();
-    // Закрываем текущее окно
-    this->close();
+    if (index == 2)
+    {
+        // Создаем объект LoginWindow
+        LoginWindow* loginWindow = new LoginWindow();
+        // Показываем окно LoginWindow
+        loginWindow->show();
+        // Закрываем текущее окно
+        this->close();
+    }
 }
+

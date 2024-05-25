@@ -4,27 +4,30 @@
 #include <QWidget>
 #include <QSqlTableModel>
 
-namespace Ui {
+namespace Ui
+{
 class EmployeeWindow;
 }
 
 class EmployeeWindow : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit EmployeeWindow(QWidget *parent = nullptr);
-    ~EmployeeWindow();
-private slots:
-    void on_applyButton_clicked();
-    void on_comboBoxEmployers_currentIndexChanged(int index);
+    public:
+        explicit EmployeeWindow(QWidget* parent = nullptr);
+        ~EmployeeWindow();
+    private slots:
+        void on_applyButton_clicked();
+        void on_comboBoxEmployers_currentIndexChanged(int index);
+        void on_exitButton_clicked();
 
 
 
-private:
-    Ui::EmployeeWindow *ui;
-    void loadEmployers();
-    void loadVacancies(int employerId);
+
+    private:
+        Ui::EmployeeWindow* ui;
+        void loadEmployers();
+        void loadVacancies(int employerId);
 
 
 };
