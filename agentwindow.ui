@@ -47,7 +47,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -169,7 +169,7 @@
         <enum>QTabWidget::TabPosition::South</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="tabsClosable">
         <bool>false</bool>
@@ -249,8 +249,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/delete.svg</normaloff>:/delete.svg</iconset>
+            <iconset resource="res.qrc">
+             <normaloff>:/icons/cross_circle.svg</normaloff>:/icons/cross_circle.svg</iconset>
            </property>
           </widget>
          </item>

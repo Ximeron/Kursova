@@ -81,6 +81,43 @@ void DBT::Setup(){
                "employer_id INTEGER, "
                "FOREIGN KEY(employer_id) REFERENCES Employers(id)"
                ")");
+
+    query.exec("CREATE TRIGGER IF NOT EXISTS prevent_delete_employer "
+               "BEFORE DELETE ON Employers "
+               "FOR EACH ROW "
+               "BEGIN "
+               "SELECT CASE "
+               "WHEN ((SELECT COUNT(*) FROM Vacancies WHERE employer_id = OLD.id) > 0) "
+               "OR ((SELECT COUNT(*) FROM Applications WHERE Должность IN (SELECT id FROM Vacancies WHERE employer_id = OLD.id)) > 0) "
+               "OR ((SELECT COUNT(*) FROM Acts WHERE employer_id = OLD.id) > 0) "
+               "THEN "
+               "RAISE(ABORT, 'Cannot delete employer with existing dependent records') "
+               "END; "
+               "END;");
+
+    query.exec("CREATE TRIGGER IF NOT EXISTS prevent_delete_employee "
+               "BEFORE DELETE ON Employees "
+               "FOR EACH ROW "
+               "BEGIN "
+               "SELECT CASE "
+               "WHEN ((SELECT COUNT(*) FROM Applications WHERE employee_id = OLD.id) > 0) "
+               "OR ((SELECT COUNT(*) FROM Acts WHERE employee_id = OLD.id) > 0) "
+               "THEN "
+               "RAISE(ABORT, 'Cannot delete employee with existing dependent records') "
+               "END; "
+               "END;");
+
+    query.exec("CREATE TRIGGER IF NOT EXISTS prevent_delete_vacancy "
+               "BEFORE DELETE ON Vacancies "
+               "FOR EACH ROW "
+               "BEGIN "
+               "SELECT CASE "
+               "WHEN ((SELECT COUNT(*) FROM Applications WHERE Должность = OLD.id) > 0) "
+               "OR ((SELECT COUNT(*) FROM Acts WHERE Должность = OLD.vacancy_name AND employer_id = OLD.employer_id) > 0) "
+               "THEN "
+               "RAISE(ABORT, 'Cannot delete vacancy with existing dependent records') "
+               "END; "
+               "END;");
 }
 bool DBT::AdminLogin(QString surname,QString name,QString patronymic){
 
