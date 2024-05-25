@@ -96,7 +96,7 @@ void DBT::Setup()
             "OR ((SELECT COUNT(*) FROM Applications WHERE Должность IN (SELECT id FROM Vacancies WHERE employer_id = OLD.id)) > 0) "
             "OR ((SELECT COUNT(*) FROM Acts WHERE employer_id = OLD.id) > 0) "
             "THEN "
-            "RAISE(ABORT, 'Cannot delete employer with existing dependent records') "
+            "RAISE(ABORT, 'Нельзя удалить работодателя, т.к. он участвует в системе и уже используется') "
             "END; "
             "END;");
 
@@ -108,7 +108,7 @@ void DBT::Setup()
             "WHEN ((SELECT COUNT(*) FROM Applications WHERE employee_id = OLD.id) > 0) "
             "OR ((SELECT COUNT(*) FROM Acts WHERE employee_id = OLD.id) > 0) "
             "THEN "
-            "RAISE(ABORT, 'Cannot delete employee with existing dependent records') "
+            "RAISE(ABORT, 'Нельзя удалить соискателя, т.к. он участвует в системе и уже используется') "
             "END; "
             "END;");
 
@@ -120,7 +120,7 @@ void DBT::Setup()
             "WHEN ((SELECT COUNT(*) FROM Applications WHERE Должность = OLD.id) > 0) "
             "OR ((SELECT COUNT(*) FROM Acts WHERE Должность = OLD.vacancy_name AND employer_id = OLD.employer_id) > 0) "
             "THEN "
-            "RAISE(ABORT, 'Cannot delete vacancy with existing dependent records') "
+            "RAISE(ABORT, 'Нельзя удалить вакансию которая участвует в системе и уже используется') "
             "END; "
             "END;");
 }

@@ -1,7 +1,9 @@
 #ifndef EMPLOYERWINDOW_H
 #define EMPLOYERWINDOW_H
 
+#include "qtableview.h"
 #include <QWidget>
+#include <QSqlTableModel>
 
 namespace Ui
 {
@@ -18,7 +20,7 @@ class EmployerWindow : public QWidget
     private slots:
         void on_addVacancyButton_clicked();
         void on_moveToActsButton_clicked();
-
+        void on_deleteVacancyButton_clicked();
 
         void on_tabWidget_tabBarClicked(int index);
 
@@ -27,7 +29,9 @@ class EmployerWindow : public QWidget
         void loadApplications();
         void setupTableWidget();
         bool vacancyExists(const QString& vacancyName, int employerId);
-
+        QSqlDatabase db;
+        QSqlTableModel *model;
+        void vacLoad();
 
 };
 

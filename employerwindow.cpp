@@ -2,26 +2,85 @@
 #include "ui_employerwindow.h"
 #include "DBT.h"
 #include "session.h"
+#include <QSqlTableModel>
 DBT EmplerDB;
 
 
 EmployerWindow::EmployerWindow(QWidget* parent)
     : QWidget(parent)
-    , ui(new Ui::EmployerWindow)
+    , ui(new Ui::EmployerWindow),
+    model(nullptr)
 {
     ui->setupUi(this);
     setupTableWidget();
     ui->employertableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->lineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Яa-zA-Z]+")));
     ui->tabWidget->setCurrentIndex(0);
+    db = QSqlDatabase::database();
+    vacLoad();
 
-    loadApplications();
 }
 
 EmployerWindow::~EmployerWindow()
 {
     delete ui;
+    if (model) {
+        delete model;
+    }
 }
+
+void EmployerWindow::vacLoad(){
+    model = new QSqlTableModel(this, db);
+    model->setTable("Vacancies");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    int employerId = Session::getInstance().getUserId();
+
+    QString filter = QString("employer_id = %1").arg(employerId);
+    model->setFilter(filter);
+    model->select();
+
+    model->setHeaderData(1, Qt::Horizontal, tr("Вакансия"));
+    ui->vacancyView->setModel(model);
+
+    // Скрытие всех столбцов, кроме "vacancy_name"
+    for (int i = 0; i < model->columnCount(); ++i) {
+        if (i != 1) {  // Скрываем все столбцы, кроме второго (vacancy_name)
+            ui->vacancyView->setColumnHidden(i, true);
+        }
+    }
+
+    ui->vacancyView->resizeColumnsToContents();
+    ui->vacancyView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->vacancyView->setSelectionMode(QAbstractItemView::SingleSelection);
+}
+
+void EmployerWindow::on_deleteVacancyButton_clicked()
+{
+    QModelIndexList selectedRows = ui->vacancyView->selectionModel()->selectedRows();
+    if (selectedRows.isEmpty()) {
+        QMessageBox::warning(this, "Selection Error", "Please select a vacancy to delete.");
+        return;
+    }
+
+    int row = selectedRows.first().row();
+    int id = model->data(model->index(row, 0)).toInt(); // Предполагается, что столбец 0 содержит ID вакансии
+
+    QSqlQuery query;
+    query.prepare("DELETE FROM Vacancies WHERE id = :id");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Database Error", "Failed to delete vacancy: " + query.lastError().text());
+        return;
+    }
+
+    model->removeRow(row);
+    model->select(); // Перезагрузка данных
+}
+
+
+
+
 
 void EmployerWindow::setupTableWidget()
 {
@@ -109,6 +168,8 @@ void EmployerWindow::on_addVacancyButton_clicked()
         qDebug() << "Ошибка выполнения запроса: " << query.lastError().text();
         QMessageBox::critical(this, "Ошибка", "Не удалось добавить вакансию.");
     }
+    model->select(); // Перезагрузка данных
+
 }
 
 
