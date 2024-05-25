@@ -12,14 +12,7 @@ bool DBT::Add_agent(QString surname, QString name, QString patronymic, QString p
     admin.bindValue(":patronymic", patronymic);
     admin.bindValue(":phone", phone);
 
-    if (admin.exec())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return admin.exec();
 }
 bool DBT::Del_agent(int id)
 {
@@ -27,14 +20,8 @@ bool DBT::Del_agent(int id)
     query.prepare("DELETE FROM Agents WHERE id = :id");
     query.bindValue(":id", id);
 
-    if (query.exec())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return query.exec();
+
 }
 QSqlQuery DBT::AgTable()  //
 {
@@ -176,7 +163,7 @@ bool DBT::AgentLogin(QString surname, QString name, QString patronymic)
     }
     else
     {
-        qDebug() << "Admin query failed:" << agent.lastError().text();
+        qDebug() << "Agent query failed:" << agent.lastError().text();
         return false;
     }
 
@@ -197,7 +184,7 @@ bool DBT::EmpleeLogin(QString surname, QString name, QString patronymic)
     }
     else
     {
-        qDebug() << "Admin query failed:" << emplee.lastError().text();
+        qDebug() << "Employee query failed:" << emplee.lastError().text();
         return false;
     }
 
@@ -218,7 +205,7 @@ bool DBT::EmplerLogin(QString surname, QString name, QString patronymic)
     }
     else
     {
-        qDebug() << "Admin query failed:" << empler.lastError().text();
+        qDebug() << "Employer query failed:" << empler.lastError().text();
         return false;
     }
 }
