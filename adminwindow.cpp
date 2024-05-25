@@ -15,6 +15,7 @@ AdminWindow::AdminWindow(QWidget *parent)
     ui->surnameLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Я]+")));
     ui->patronymicLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Я]+")));
     ui->phoneLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]+")));
+    ui->agentsViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 }
 

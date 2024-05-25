@@ -10,6 +10,7 @@ EmployerWindow::EmployerWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setupTableWidget();
+    ui->employertableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     loadApplications();
 }

@@ -25,6 +25,10 @@ AgentWindow::AgentWindow(QWidget *parent)
     ui->employeePatronymicLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Я]+")));
     ui->employeeJobTimeLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]+")));
     ui->employeePhoneLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]+")));
+
+    ui->empleeTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->emplerTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     loadActs();
 
 
