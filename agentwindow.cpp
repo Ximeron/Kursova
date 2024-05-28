@@ -301,6 +301,45 @@ void AgentWindow::on_verifyActButton_clicked()
     }
 }
 
+void AgentWindow::on_deleteAct_clicked()
+{
+    // Получаем выбранный элемент
+    QTableWidgetItem* item = ui->tableWidgetActs->currentItem();
+
+    if (!item)
+    {
+        QMessageBox::warning(this, "Ошибка", "Выберите запись для удаления");
+        return;
+    }
+
+
+    int row = item->row(); // Получаем индекс строки
+    int id = ui->emplerTable->item(row, 0)->text().toInt(); // Получаем ID агента
+
+    // Выполняем запрос к базе данных для удаления агента
+    QSqlQuery actdel = agentDB.DelAct(id);
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить запись?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        if (actdel.exec())
+        {
+            populateEmplsTable();
+            QMessageBox::information(this, "Успех", "Запись успешно удалена");
+            loadActs();
+
+        }
+        else
+        {
+            QMessageBox::critical(this, "Ошибка", "Не удалось удалить запись");
+        }
+    }
+
+}
+
 void AgentWindow::on_exitButton_clicked()
 {
     // Создаем объект LoginWindow

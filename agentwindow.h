@@ -24,7 +24,7 @@ class AgentWindow : public QWidget
         void on_deleteEmpler_clicked();
         void on_verifyActButton_clicked();
         void on_exitButton_clicked();
-
+        void on_deleteAct_clicked();
         void loadActs();
 
     private:

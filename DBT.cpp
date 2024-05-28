@@ -363,3 +363,11 @@ QSqlQuery DBT::addApplication(int employeeId, int employerId, QString vacancyNam
     return addApp;
 }
 
+QSqlQuery DBT::DelAct(int id)
+{
+    QSqlQuery DelAct;
+    DelAct.prepare("DELETE FROM Acts WHERE id = :id");
+    DelAct.bindValue(":id", id);
+
+    return DelAct;
+}

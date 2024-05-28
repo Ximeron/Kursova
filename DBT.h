@@ -53,6 +53,7 @@ class DBT
 
         QSqlQuery loadVacancy(int id);
 
+        QSqlQuery DelAct(int id);
 
 
 
