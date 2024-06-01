@@ -123,6 +123,42 @@ void DBT::Setup()
             "RAISE(ABORT, 'Нельзя удалить вакансию которая участвует в системе и уже используется') "
             "END; "
             "END;");
+
+
+
+
+    // Проверка и добавление администратора
+    query.exec("SELECT COUNT(*) FROM Admins");
+    if (query.next() && query.value(0).toInt() == 0) {
+        query.exec("INSERT INTO Admins (Фамилия, Имя, Отчество, Телефон) VALUES ('Симанов', 'Иван', 'Николаевич', '11111111111')");
+    }
+
+    // Проверка и добавление агента
+    query.exec("SELECT COUNT(*) FROM Agents");
+    if (query.next() && query.value(0).toInt() == 0) {
+        query.exec("INSERT INTO Agents (Фамилия, Имя, Отчество, Телефон) VALUES ('Аретемьев', 'Леонид', 'Сергеевич', '22222222222')");
+    }
+
+    // Проверка и добавление соискателя
+    query.exec("SELECT COUNT(*) FROM Employees");
+    if (query.next() && query.value(0).toInt() == 0) {
+        query.exec("INSERT INTO Employees (Фамилия, Имя, Отчество, Телефон, Стаж) VALUES ('Петров', 'Илья', 'Максимович', '1234567890', 5)");
+    }
+
+    // Проверка и добавление работодателя
+    query.exec("SELECT COUNT(*) FROM Employers");
+    if (query.next() && query.value(0).toInt() == 0) {
+        query.exec("INSERT INTO Employers (Фамилия, Имя, Отчество, ИНН, Телефон) VALUES ('Серов', 'Герман', 'Миронович', '486050896530', '0987654321')");
+    }
+
+
+
+
+
+
+
+
+
 }
 bool DBT::AdminLogin(QString surname, QString name, QString patronymic)
 {
