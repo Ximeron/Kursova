@@ -4,5 +4,7 @@
         <file>icons/exit_right.svg</file>
         <file>icons/refresh_alt.svg</file>
         <file>icons/box_add.svg</file>
+        <file>style.astylerc</file>
+        <file>icons/book_text.svg</file>
     </qresource>
 </RCC>
