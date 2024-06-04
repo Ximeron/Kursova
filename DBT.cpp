@@ -136,7 +136,7 @@ void DBT::Setup()
     // Проверка и добавление агента
     query.exec("SELECT COUNT(*) FROM Agents");
     if (query.next() && query.value(0).toInt() == 0) {
-        query.exec("INSERT INTO Agents (Фамилия, Имя, Отчество, Телефон) VALUES ('Аретемьев', 'Леонид', 'Сергеевич', '22222222222')");
+        query.exec("INSERT INTO Agents (Фамилия, Имя, Отчество, Телефон) VALUES ('Еремеев', 'Олег', 'Львович', '22222222222')");
     }
 
     // Проверка и добавление соискателя
