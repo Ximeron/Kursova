@@ -17,7 +17,7 @@ AdminWindow::AdminWindow(QWidget* parent)
     ui->phoneLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]+")));
     ui->agentsViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tabWidget->setCurrentIndex(0);
-
+    populateAgentsTable();
 }
 
 AdminWindow::~AdminWindow()
