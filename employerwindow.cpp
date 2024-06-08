@@ -14,7 +14,7 @@ EmployerWindow::EmployerWindow(QWidget* parent)
     ui->setupUi(this);
     setupTableWidget();
     ui->employertableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->lineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Яa-zA-Z]+")));
+    ui->lineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[а-яА-Яa-zA-Z ]+")));
     ui->tabWidget->setCurrentIndex(0);
     db = QSqlDatabase::database();
     vacLoad();
